@@ -1,0 +1,16 @@
+//
+//  PrefixHeader.pch
+//  TYyCamera
+//
+//  Created by Maty on 2018/8/21.
+//  Copyright © 2018年 kangarootec. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#import <Masonry.h>
+#import "TYCameraControlInstance.h"
+
+
+#endif /* PrefixHeader_pch */

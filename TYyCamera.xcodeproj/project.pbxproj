@@ -14,6 +14,9 @@
 		4C4271AE212BEF7F00F63907 /* TYyCameraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271AD212BEF7F00F63907 /* TYyCameraTests.m */; };
 		4C4271B9212BEF7F00F63907 /* TYyCameraUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271B8212BEF7F00F63907 /* TYyCameraUITests.m */; };
 		4C4271C8212BEFB500F63907 /* TYBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271C7212BEFB500F63907 /* TYBaseViewController.m */; };
+		4C4271CD212BF15100F63907 /* TYCameraControlInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271CC212BF15100F63907 /* TYCameraControlInstance.m */; };
+		4C4271D0212BF1C200F63907 /* TYCameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271CF212BF1C200F63907 /* TYCameraPreviewView.m */; };
+		A35072F18E9DBDD37227547B /* libPods-TYyCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF79ADEAA19492F6AA5EE1D /* libPods-TYyCamera.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3DA2E117FE56BAD1C53A989B /* Pods-TYyCamera.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TYyCamera.release.xcconfig"; path = "Pods/Target Support Files/Pods-TYyCamera/Pods-TYyCamera.release.xcconfig"; sourceTree = "<group>"; };
 		4C427191212BEF7D00F63907 /* TYyCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TYyCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C427194212BEF7D00F63907 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4C427195212BEF7D00F63907 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -49,6 +53,13 @@
 		4C4271BA212BEF7F00F63907 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C4271C6212BEFB500F63907 /* TYBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYBaseViewController.h; sourceTree = "<group>"; };
 		4C4271C7212BEFB500F63907 /* TYBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYBaseViewController.m; sourceTree = "<group>"; };
+		4C4271CB212BF15100F63907 /* TYCameraControlInstance.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYCameraControlInstance.h; sourceTree = "<group>"; };
+		4C4271CC212BF15100F63907 /* TYCameraControlInstance.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCameraControlInstance.m; sourceTree = "<group>"; };
+		4C4271CE212BF1C200F63907 /* TYCameraPreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYCameraPreviewView.h; sourceTree = "<group>"; };
+		4C4271CF212BF1C200F63907 /* TYCameraPreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCameraPreviewView.m; sourceTree = "<group>"; };
+		4C4271D2212BF49900F63907 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		612F4BD4A956FC6BA85D9707 /* Pods-TYyCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TYyCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TYyCamera/Pods-TYyCamera.debug.xcconfig"; sourceTree = "<group>"; };
+		7BF79ADEAA19492F6AA5EE1D /* libPods-TYyCamera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TYyCamera.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A35072F18E9DBDD37227547B /* libPods-TYyCamera.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +88,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18E7B02BA2237C73E59084AE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7BF79ADEAA19492F6AA5EE1D /* libPods-TYyCamera.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2337377519BCFF05AF73F68C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				612F4BD4A956FC6BA85D9707 /* Pods-TYyCamera.debug.xcconfig */,
+				3DA2E117FE56BAD1C53A989B /* Pods-TYyCamera.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		4C427188212BEF7D00F63907 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +112,8 @@
 				4C4271AC212BEF7F00F63907 /* TYyCameraTests */,
 				4C4271B7212BEF7F00F63907 /* TYyCameraUITests */,
 				4C427192212BEF7D00F63907 /* Products */,
+				2337377519BCFF05AF73F68C /* Pods */,
+				18E7B02BA2237C73E59084AE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,10 +130,12 @@
 		4C427193212BEF7D00F63907 /* TYyCamera */ = {
 			isa = PBXGroup;
 			children = (
+				4C4271D2212BF49900F63907 /* PrefixHeader.pch */,
 				4C427194212BEF7D00F63907 /* AppDelegate.h */,
 				4C427195212BEF7D00F63907 /* AppDelegate.m */,
 				4C4271C6212BEFB500F63907 /* TYBaseViewController.h */,
 				4C4271C7212BEFB500F63907 /* TYBaseViewController.m */,
+				4C4271CA212BF12200F63907 /* Camera */,
 				4C42719D212BEF7F00F63907 /* Assets.xcassets */,
 				4C42719F212BEF7F00F63907 /* LaunchScreen.storyboard */,
 				4C4271A2212BEF7F00F63907 /* Info.plist */,
@@ -129,6 +162,17 @@
 			path = TYyCameraUITests;
 			sourceTree = "<group>";
 		};
+		4C4271CA212BF12200F63907 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				4C4271CB212BF15100F63907 /* TYCameraControlInstance.h */,
+				4C4271CC212BF15100F63907 /* TYCameraControlInstance.m */,
+				4C4271CE212BF1C200F63907 /* TYCameraPreviewView.h */,
+				4C4271CF212BF1C200F63907 /* TYCameraPreviewView.m */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -136,6 +180,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C4271BD212BEF7F00F63907 /* Build configuration list for PBXNativeTarget "TYyCamera" */;
 			buildPhases = (
+				DB868B0B0E0BEC1B317217D0 /* [CP] Check Pods Manifest.lock */,
 				4C42718D212BEF7D00F63907 /* Sources */,
 				4C42718E212BEF7D00F63907 /* Frameworks */,
 				4C42718F212BEF7D00F63907 /* Resources */,
@@ -253,14 +298,37 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		DB868B0B0E0BEC1B317217D0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TYyCamera-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4C42718D212BEF7D00F63907 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C4271CD212BF15100F63907 /* TYCameraControlInstance.m in Sources */,
 				4C4271C8212BEFB500F63907 /* TYBaseViewController.m in Sources */,
 				4C4271A4212BEF7F00F63907 /* main.m in Sources */,
 				4C427196212BEF7D00F63907 /* AppDelegate.m in Sources */,
+				4C4271D0212BF1C200F63907 /* TYCameraPreviewView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,10 +487,13 @@
 		};
 		4C4271BE212BEF7F00F63907 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 612F4BD4A956FC6BA85D9707 /* Pods-TYyCamera.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JJGBDF7PM8;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TYyCamera/PrefixHeader.pch";
 				INFOPLIST_FILE = TYyCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -437,10 +508,13 @@
 		};
 		4C4271BF212BEF7F00F63907 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3DA2E117FE56BAD1C53A989B /* Pods-TYyCamera.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JJGBDF7PM8;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/TYyCamera/PrefixHeader.pch";
 				INFOPLIST_FILE = TYyCamera/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
