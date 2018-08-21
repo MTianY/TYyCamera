@@ -24,11 +24,11 @@
  * 会将捕捉数据直接输出到图层中,并确保与会话状态同步.
  */
 - (void)setCaptureSession:(AVCaptureSession *)captureSession {
-    [self.previewLayer setSession:captureSession];
+    [(AVCaptureVideoPreviewLayer *)self.layer setSession:captureSession];
 }
 
 - (AVCaptureSession *)captureSession {
-    return self.previewLayer.session;
+    return [(AVCaptureVideoPreviewLayer *)self.layer session];
 }
 
 + (Class)layerClass {
@@ -37,6 +37,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor clearColor];
+        
         
     }
     return self;

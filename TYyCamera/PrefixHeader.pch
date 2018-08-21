@@ -12,5 +12,8 @@
 #import <Masonry.h>
 #import "TYCameraControlInstance.h"
 
+#define TYSCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
+#define TYSCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+
 
 #endif /* PrefixHeader_pch */
