@@ -481,7 +481,7 @@ typedef NS_ENUM(NSInteger, AVCaptureExposureMode) {
 }
 ```
 
-### 5.3 重置曝光,将对焦点和曝光点放在中心位置
+#### 5.3 重置曝光,将对焦点和曝光点放在中心位置
 
 ```objc
 /**
@@ -516,4 +516,18 @@ typedef NS_ENUM(NSInteger, AVCaptureExposureMode) {
     
 }
 ```
+
+### 6.闪光灯和手电筒模式
+
+AVCaptureDevice 类可以让开发者修改摄像头的闪光灯和手电筒模式. 设备后面的LED灯当拍摄静态图片时作为闪光灯,而当拍摄视频时用作手电筒. 捕捉设备的`flasMode`和`torchMode`属性可以被设置为一下3个值中的一个:
+
+- 总是开启
+    - `AVCaptureTorchModeOn`  
+    - `AVCaptureFlashModeOn`
+- 总是关闭  
+    - `AVCaptureTorchModeOff`  
+    - `AVCaptureFlashModeOff`
+- 系统会基于周围环境光照情况自动关闭或打开 LED
+    - `AVCaptureTorchModeAuto` 
+    - `AVCaptureFlashModeAuto`
 

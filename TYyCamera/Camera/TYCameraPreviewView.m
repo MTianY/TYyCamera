@@ -14,6 +14,7 @@
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 @property (nonatomic, strong) TYCameraOverlayView *overlayView;
 
+
 @end
 
 @implementation TYCameraPreviewView
@@ -43,6 +44,7 @@
         [self setupUI];
         
         UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesMethod:)];
+        NSLog(@"%@",[self class]);
         [self addGestureRecognizer:tapGes];
         
     }
@@ -51,7 +53,7 @@
 
 #pragma mark - 点击对焦
 - (void)tapGesMethod:(UITapGestureRecognizer *)tap {
-    NSLog(@"Tap");
+    NSLog(@"Tap---%@",[self class]);
     CGPoint tapScreenPoint = [tap locationInView:self];
     CGPoint equipmentPoint = [self screenCoordinateSystemPointToEquipmentCoordinateSystemPoint:tapScreenPoint];
     if ([[TYCameraControlInstance shareInstance] canCameraSupportsTapToFocus]) {
@@ -76,6 +78,9 @@
     [self.overlayView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.mas_equalTo(self);
     }];
+    
+
+    
 }
 
 #pragma mark - Lazy Load

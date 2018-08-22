@@ -24,8 +24,13 @@
 @property (nonatomic, strong) AVCaptureMovieFileOutput *movieOutput;
 
 @property (nonatomic, strong) dispatch_queue_t videoQueue;
-
+/**
+ * 当前被激活的输入设备
+ */
 @property (nonatomic, strong) AVCaptureDeviceInput *activeVideoInput;
+/**
+ * 摄像头数量
+ */
 @property (nonatomic, readonly) NSUInteger cameraCount;
 
 @end
@@ -318,5 +323,50 @@
     }
     
 }
+
+#pragma mark - 闪光灯&手电筒模式
+- (BOOL)cameraHasFlash {
+    return [[self activeCamera] hasFlash];
+}
+
+- (AVCaptureFlashMode)flashMode {
+    return [[self activeCamera] flashMode];
+}
+
+- (void)setFlashMode:(AVCaptureFlashMode)flashMode {
+    AVCaptureDevice *device = [self activeCamera];
+    if ([device isFlashModeSupported:flashMode]) {
+        NSError *error;
+        if ([device lockForConfiguration:&error]) {
+            device.flashMode = flashMode;
+            [device unlockForConfiguration];
+        } else {
+            NSLog(@"%@",error);
+        }
+    }
+}
+
+- (BOOL)cameraHasTorch {
+    return [[self activeCamera] hasTorch];
+}
+
+- (AVCaptureTorchMode)torchMode {
+    return [[self activeCamera] torchMode];
+}
+
+- (void)setTorchMode:(AVCaptureTorchMode)torchMode {
+    AVCaptureDevice *device = [self activeCamera];
+    if ([device isTorchModeSupported:torchMode]) {
+        NSError *error;
+        if ([device lockForConfiguration:&error]) {
+            device.torchMode = torchMode;
+            [device unlockForConfiguration];
+        } else {
+            NSLog(@"%@",error);
+        }
+    }
+}
+
+
 
 @end

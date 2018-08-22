@@ -28,6 +28,9 @@
     
 }
 
+
+
+
 #pragma mark - UI
 - (void)setupUI {
     [self.view addSubview:self.previewView];

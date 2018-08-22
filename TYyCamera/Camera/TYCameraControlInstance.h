@@ -39,12 +39,46 @@
 - (void)switchCameras;
 
 #pragma mark - 点击对焦
+/**
+ * 是否支持点击对焦
+ */
 - (BOOL)canCameraSupportsTapToFocus;
+/**
+ * 点击对焦
+ */
 - (void)focusAtPoint:(CGPoint)point;
 
 #pragma mark - 点击曝光
+/**
+ * 是否支持点击曝光
+ */
 - (BOOL)canCameraSupportsTapToExpose;
+/**
+ * 点击曝光
+ */
 - (void)exposeAtPoint:(CGPoint)point;
+/**
+ * 重置聚焦和曝光
+ * 连接聚焦和曝光(从中心点扩散)
+ */
 - (void)resetFocusAndExposureModes;
+
+#pragma mark - 闪光灯 & 手电筒
+/**
+ * 闪光灯模式
+ */
+@property (nonatomic) AVCaptureFlashMode flashMode;
+/**
+ * 手电筒模式
+ */
+@property (nonatomic) AVCaptureTorchMode torchMode;
+/**
+ * 判断是否支持闪光灯
+ */
+- (BOOL)cameraHasFlash;
+/**
+ * 判断是否支持手电筒
+ */
+- (BOOL)cameraHasTorch;
 
 @end
