@@ -28,4 +28,23 @@
  */
 - (void)stopSession;
 
+#pragma mark - 切换摄像头
+/**
+ * 是否超过一个摄像头
+ */
+- (BOOL)canSwitchCameras;
+/**
+ * 切换摄像头
+ */
+- (void)switchCameras;
+
+#pragma mark - 点击对焦
+- (BOOL)canCameraSupportsTapToFocus;
+- (void)focusAtPoint:(CGPoint)point;
+
+#pragma mark - 点击曝光
+- (BOOL)canCameraSupportsTapToExpose;
+- (void)exposeAtPoint:(CGPoint)point;
+- (void)resetFocusAndExposureModes;
+
 @end

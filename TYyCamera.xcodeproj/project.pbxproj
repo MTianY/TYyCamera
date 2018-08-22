@@ -16,6 +16,7 @@
 		4C4271C8212BEFB500F63907 /* TYBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271C7212BEFB500F63907 /* TYBaseViewController.m */; };
 		4C4271CD212BF15100F63907 /* TYCameraControlInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271CC212BF15100F63907 /* TYCameraControlInstance.m */; };
 		4C4271D0212BF1C200F63907 /* TYCameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271CF212BF1C200F63907 /* TYCameraPreviewView.m */; };
+		4CC0E31A212CF8C200245CF9 /* TYCameraOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC0E319212CF8C200245CF9 /* TYCameraOverlayView.m */; };
 		A35072F18E9DBDD37227547B /* libPods-TYyCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF79ADEAA19492F6AA5EE1D /* libPods-TYyCamera.a */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,8 @@
 		4C4271CE212BF1C200F63907 /* TYCameraPreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYCameraPreviewView.h; sourceTree = "<group>"; };
 		4C4271CF212BF1C200F63907 /* TYCameraPreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCameraPreviewView.m; sourceTree = "<group>"; };
 		4C4271D2212BF49900F63907 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		4CC0E318212CF8C200245CF9 /* TYCameraOverlayView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYCameraOverlayView.h; sourceTree = "<group>"; };
+		4CC0E319212CF8C200245CF9 /* TYCameraOverlayView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCameraOverlayView.m; sourceTree = "<group>"; };
 		612F4BD4A956FC6BA85D9707 /* Pods-TYyCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TYyCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TYyCamera/Pods-TYyCamera.debug.xcconfig"; sourceTree = "<group>"; };
 		7BF79ADEAA19492F6AA5EE1D /* libPods-TYyCamera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TYyCamera.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -169,6 +172,8 @@
 				4C4271CC212BF15100F63907 /* TYCameraControlInstance.m */,
 				4C4271CE212BF1C200F63907 /* TYCameraPreviewView.h */,
 				4C4271CF212BF1C200F63907 /* TYCameraPreviewView.m */,
+				4CC0E318212CF8C200245CF9 /* TYCameraOverlayView.h */,
+				4CC0E319212CF8C200245CF9 /* TYCameraOverlayView.m */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -327,6 +332,7 @@
 				4C4271CD212BF15100F63907 /* TYCameraControlInstance.m in Sources */,
 				4C4271C8212BEFB500F63907 /* TYBaseViewController.m in Sources */,
 				4C4271A4212BEF7F00F63907 /* main.m in Sources */,
+				4CC0E31A212CF8C200245CF9 /* TYCameraOverlayView.m in Sources */,
 				4C427196212BEF7D00F63907 /* AppDelegate.m in Sources */,
 				4C4271D0212BF1C200F63907 /* TYCameraPreviewView.m in Sources */,
 			);

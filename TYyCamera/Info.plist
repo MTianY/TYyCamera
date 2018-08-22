@@ -47,5 +47,7 @@
 	<string>添加照片到相册</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>从相册取照片</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

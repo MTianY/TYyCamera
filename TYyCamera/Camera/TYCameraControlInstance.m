@@ -187,6 +187,7 @@
 
 #pragma mark 切换摄像头
 - (void)switchCameras {
+    
     if (![self canSwitchCameras]) {
         return;
     }
@@ -205,8 +206,115 @@
             [self.captureSession addInput:self.activeVideoInput];
         }
         [self.captureSession commitConfiguration];
-    } else {
+    }
+    
+}
+
+#pragma mark - 点击对焦
+/**
+ * 询问是否支持兴趣点对焦
+ */
+- (BOOL)canCameraSupportsTapToFocus {
+    return [[self activeCamera] isFocusPointOfInterestSupported];
+}
+
+/**
+ * 点击对焦
+ * point 首先要从屏幕坐标系转为捕捉设备坐标.
+ */
+- (void)focusAtPoint:(CGPoint)point {
+    AVCaptureDevice *device = [self activeCamera];
+    if (device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+        NSError *error;
+        if ([device lockForConfiguration:&error]) {
+            device.focusPointOfInterest = point;
+            device.focusMode = AVCaptureFocusModeAutoFocus;
+            [device unlockForConfiguration];
+        } else {
+            NSLog(@"%@",error);
+        }
+    }
+}
+
+#pragma mark - 点击曝光
+/**
+ * 询问是否支持点击曝光
+ */
+- (BOOL)canCameraSupportsTapToExpose {
+    return [[self activeCamera] isExposurePointOfInterestSupported];
+}
+
+/**
+ * 点击曝光
+ */
+- (void)exposeAtPoint:(CGPoint)point {
+    AVCaptureDevice *device = [self activeCamera];
+    AVCaptureExposureMode exposureMode = AVCaptureExposureModeContinuousAutoExposure;
+    if (device.isExposurePointOfInterestSupported) {
+        [device isExposureModeSupported:exposureMode];
         
+        NSError *error;
+        if ([device lockForConfiguration:&error]) {
+            device.exposurePointOfInterest = point;
+            device.exposureMode = exposureMode;
+            if ([device isExposureModeSupported:AVCaptureExposureModeLocked]) {
+                [device addObserver:self forKeyPath:@"adjustingExposure" options:NSKeyValueObservingOptionNew context:nil];
+            }
+            [device unlockForConfiguration];
+        } else {
+            NSLog(@"%@",error);
+        }
+        
+    }
+}
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    AVCaptureDevice *device = (AVCaptureDevice *)object;
+    if (!device.isAdjustingExposure && [device isExposureModeSupported:AVCaptureExposureModeLocked]) {
+        [object removeObserver:self forKeyPath:@"adjustingExposure" context:nil];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSError *error;
+            if ([device lockForConfiguration:&error]) {
+                device.exposureMode = AVCaptureExposureModeLocked;
+                [device unlockForConfiguration];
+            } else {
+                NSLog(@"%@",error);
+            }
+        });
+        
+    }
+}
+
+/**
+ * 切换回连续对焦和曝光模式
+ * 中心店对焦和曝光(centerPoint)
+ */
+- (void)resetFocusAndExposureModes {
+    AVCaptureDevice *device = [self activeCamera];
+    
+    AVCaptureFocusMode focusMode = AVCaptureFocusModeContinuousAutoFocus;
+    BOOL canResetFocus = [device isFocusPointOfInterestSupported] && [device isFocusModeSupported:focusMode];
+    
+    AVCaptureExposureMode exposureMode = AVCaptureExposureModeContinuousAutoExposure;
+    BOOL canResetExposure = [device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode];
+    
+    CGPoint centerPoint = CGPointMake(0.5f, 0.5f);
+    
+    NSError *error;
+    if ([device lockForConfiguration:&error]) {
+        if (canResetFocus) {
+            device.focusMode = focusMode;
+            device.focusPointOfInterest = centerPoint;
+        }
+        if (canResetExposure) {
+            device.exposureMode = exposureMode;
+            device.exposurePointOfInterest = centerPoint;
+        }
+        [device unlockForConfiguration];
+    } else {
+        NSLog(@"%@",error);
     }
     
 }

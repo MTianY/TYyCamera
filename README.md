@@ -241,6 +241,279 @@ Privacy - Photo Library Usage Description
 
 ### 4.摄像头切换功能
 
+目前几乎所有的 iOS 设备都具有前置和后置两个摄像头.首先看一些摄像头的支撑方法,对实现摄像头的切换会方便很多.
+
+- 返回指定位置的设备`AVCaptureDevice`.
+    - 有效的位置为`AVCaptureDevicePositionFront` 或 `AVCaptureDevicePositionBack`.
+    - 遍历可用的视频设备并返回`position`参数对应的值.
+
+```objc
+/**
+ * 返回指定位置的设备.(前置 or 后置)
+ */
+- (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition)position {
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    for (AVCaptureDevice *device in devices) {
+        if (device.position == position) {
+            return device;
+        }
+    }
+    return nil;
+}
+``` 
+
+- 返回当前捕捉会话对应的摄像头
+    - 返回激活的捕捉设备输入的 device 属性.
+
+```objc
+/**
+ * 返回当前捕捉会话对应的摄像头,返回激活的捕捉设备输入的 device 属性
+ */
+- (AVCaptureDevice *)activeCamera {
+    return self.activeVideoInput.device;
+}
+```
+
+- 返回当前未被激活的摄像头
+    - 通过查找当前激活摄像头的反向摄像头实现.
+    - 如果设备只有一个摄像头,则返回 nil;
+
+```objc
+/**
+ * 返回未被激活的摄像头.(如果设备只有一个摄像头,返回 nil)
+ */
+- (AVCaptureDevice *)inactiveCamera {
+    AVCaptureDevice *device = nil;
+    if (self.cameraCount > 1) {
+        if ([self activeCamera].position == AVCaptureDevicePositionBack) {
+            device = [self cameraWithPosition:AVCaptureDevicePositionFront];
+        } else {
+            device = [self cameraWithPosition:AVCaptureDevicePositionBack];
+        }
+    }
+    return device;
+}
+``` 
+
+- 返回一个 BOOL 值,判断是否有超过一个摄像头可用.
+
+```objc
+/**
+ * 返回可用视频捕捉设备的数量
+ */
+- (NSUInteger)cameraCount {
+    return [[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count];
+}
 
 
+/**
+ * 是否超过一个摄像头,为切换摄像头做准备
+ */
+- (BOOL)canSwitchCameras {
+    return self.cameraCount > 1;
+}
+```
+
+- **切换摄像头功能实现**
+    - 首先判断是否可以切换摄像头.不可以直接 return 掉
+    - 获取未被激活的摄像头设备,并未它创建一个新的`AVCaptureDeviceInput`.
+    - 在会话中调用`beginConfiguration`
+    - 移除当前激活的`AVCaptureDeviceInput`. 该当前视频捕捉设备输入信息必须在新的对象添加前移除.
+    - 检测是否可以添加`AVCaptureDeviceInput`.可以后添加.并重新设置`activeVideoInput`属性.
+    - 配置完成后,对`AVCaptureSession`调用`commitConfiguration`.会分批将所有变更整合在一起,得出一个有关会话的单独的、原子性的修改.
+
+```objc
+- (void)switchCameras {
+    
+    if (![self canSwitchCameras]) {
+        return;
+    }
+    
+    // 获取未激活的摄像头
+    NSError *error;
+    AVCaptureDevice *videoDevice = [self inactiveCamera];
+    AVCaptureDeviceInput *videoInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
+    if (videoInput) {
+        [self.captureSession beginConfiguration];
+        [self.captureSession removeInput:self.activeVideoInput];
+        if ([self.captureSession canAddInput:videoInput]) {
+            [self.captureSession addInput:videoInput];
+            self.activeVideoInput = videoInput;
+        } else {
+            [self.captureSession addInput:self.activeVideoInput];
+        }
+        [self.captureSession commitConfiguration];
+    }
+    
+}
+```
+
+### 5.配置捕捉设备
+
+`AVCaptureDevice` 定义了很多方法让开发者控制 iOS 设备上的摄像头.尤其是可以独立调整和锁定摄像头的`焦距、曝光和白平衡`.还可以控制设备的 LED 作为拍照的`闪光灯或手电筒使用`.对焦和曝光还可以基于特定的`兴趣点`进行设置,可以实现`点击对焦`和`点击曝光`的功能.
+
+- 如果要修改摄像头设备时,一定要`先测试`修改动作是否能被设备支持.否则可能会抛异常,程序闪退.
+    - 如前置摄像头不支持对焦操作,因为它和目标之间不会超过一个臂长的距离.
+    - 大部分的后置摄像头都支持全尺寸对焦. 
+
+    
+#### 5.1 点击对焦
+
+- 首先要询问激活中的摄像头是否支持兴趣点对焦.
+- `focusAtPoint:`传递进来的 `point`要从屏幕坐标系转为设备坐标系.
+- 将屏幕坐标系转为设备坐标系的方法在`TYCameraPreviewView.m`上.
+
+实现代码:
+
+```objc
+/**
+ * 询问是否支持兴趣点对焦
+ */
+- (BOOL)canCameraSupportsTapToFocus {
+    return [[self activeCamera] isFocusPointOfInterestSupported];
+}
+
+/**
+ * 点击对焦
+ * point 首先要从屏幕坐标系转为捕捉设备坐标.
+ */
+- (void)focusAtPoint:(CGPoint)point {
+    AVCaptureDevice *device = [self activeCamera];
+    if (device.isFocusPointOfInterestSupported && [device isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+        NSError *error;
+        if ([device lockForConfiguration:&error]) {
+            device.focusPointOfInterest = point;
+            device.focusMode = AVCaptureFocusModeAutoFocus;
+            [device unlockForConfiguration];
+        } else {
+            NSLog(@"%@",error);
+        }
+    }
+}
+
+/**
+ * 将屏幕坐标系上的触控点转为设备坐标系的点
+ */
+- (CGPoint)screenCoordinateSystemPointToEquipmentCoordinateSystemPoint:(CGPoint)point {
+    AVCaptureVideoPreviewLayer *layer = (AVCaptureVideoPreviewLayer *)self.layer;
+    return [layer captureDevicePointOfInterestForPoint:point];
+}
+```
+
+#### 5.2 点击曝光
+
+- 首先依然是询问激活设备是否支持对一个兴趣点进行曝光
+- 曝光模式
+
+
+```objc
+typedef NS_ENUM(NSInteger, AVCaptureExposureMode) {
+    // 锁定当前曝光
+    AVCaptureExposureModeLocked                            = 0,
+    
+    // 自动调整曝光一次,然后将曝光模式改为 AVCaptureExposureModeLocked
+    AVCaptureExposureModeAutoExpose                        = 1,
+    
+    // 在需要的时候自动调整曝光
+    AVCaptureExposureModeContinuousAutoExposure            = 2,
+    
+    // 根据用户提供的 ISO、曝光值调整曝光.
+    AVCaptureExposureModeCustom NS_ENUM_AVAILABLE_IOS(8_0) = 3,
+} NS_AVAILABLE(10_7, 4_0) __TVOS_PROHIBITED;
+```
+
+- 对`adjustingExposure`添加 KVO 监听,观察该属性可以知道曝光调整何时完成,让我们有机会在该点上锁定曝光.
+- 判断设备是否不再调整曝光等级,确认设备的`exposureMode`是否可以设置为`AVCaptureExposureModeLocked`.
+- 移除监听器,这样就不会得到后续变更的通知.
+- 最后,已异步方式调度回主队列,定义一个块来设置`exposureMode`属性为`AVCaptureExposureModeLocked`.将`exposureMode`更改转移到下一个事件循环运行非常重要,这样上一步中的`removeObserver:`调用才有机会完成.
+
+实现代码
+
+```objc
+/**
+ * 询问是否支持点击曝光
+ */
+- (BOOL)canCameraSupportsTapToExpose {
+    return [[self activeCamera] isExposurePointOfInterestSupported];
+}
+
+/**
+ * 点击曝光
+ */
+- (void)exposeAtPoint:(CGPoint)point {
+    AVCaptureDevice *device = [self activeCamera];
+    AVCaptureExposureMode exposureMode = AVCaptureExposureModeContinuousAutoExposure;
+    if (device.isExposurePointOfInterestSupported) {
+        [device isExposureModeSupported:exposureMode];
+        
+        NSError *error;
+        if ([device lockForConfiguration:&error]) {
+            device.exposurePointOfInterest = point;
+            device.exposureMode = exposureMode;
+            if ([device isExposureModeSupported:AVCaptureExposureModeLocked]) {
+                [device addObserver:self forKeyPath:@"adjustingExposure" options:NSKeyValueObservingOptionNew context:nil];
+            }
+            [device unlockForConfiguration];
+        } else {
+            NSLog(@"%@",error);
+        }
+        
+    }
+}
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    AVCaptureDevice *device = (AVCaptureDevice *)object;
+    if (!device.isAdjustingExposure && [device isExposureModeSupported:AVCaptureExposureModeLocked]) {
+        [object removeObserver:self forKeyPath:@"adjustingExposure" context:nil];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSError *error;
+            if ([device lockForConfiguration:&error]) {
+                device.exposureMode = AVCaptureExposureModeLocked;
+                [device unlockForConfiguration];
+            } else {
+                NSLog(@"%@",error);
+            }
+        });
+        
+    }
+}
+```
+
+### 5.3 重置曝光,将对焦点和曝光点放在中心位置
+
+```objc
+/**
+ * 切换回连续对焦和曝光模式
+ * 中心店对焦和曝光(centerPoint)
+ */
+- (void)resetFocusAndExposureModes {
+    AVCaptureDevice *device = [self activeCamera];
+    
+    AVCaptureFocusMode focusMode = AVCaptureFocusModeContinuousAutoFocus;
+    BOOL canResetFocus = [device isFocusPointOfInterestSupported] && [device isFocusModeSupported:focusMode];
+    
+    AVCaptureExposureMode exposureMode = AVCaptureExposureModeContinuousAutoExposure;
+    BOOL canResetExposure = [device isExposurePointOfInterestSupported] && [device isExposureModeSupported:exposureMode];
+    
+    CGPoint centerPoint = CGPointMake(0.5f, 0.5f);
+    
+    NSError *error;
+    if ([device lockForConfiguration:&error]) {
+        if (canResetFocus) {
+            device.focusMode = focusMode;
+            device.focusPointOfInterest = centerPoint;
+        }
+        if (canResetExposure) {
+            device.exposureMode = exposureMode;
+            device.exposurePointOfInterest = centerPoint;
+        }
+        [device unlockForConfiguration];
+    } else {
+        NSLog(@"%@",error);
+    }
+    
+}
+```
 

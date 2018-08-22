@@ -7,10 +7,12 @@
 //
 
 #import "TYCameraPreviewView.h"
+#import "TYCameraOverlayView.h"
 
 @interface TYCameraPreviewView ()
 
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
+@property (nonatomic, strong) TYCameraOverlayView *overlayView;
 
 @end
 
@@ -38,11 +40,50 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
+        [self setupUI];
         
+        UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesMethod:)];
+        [self addGestureRecognizer:tapGes];
         
     }
     return self;
 }
 
+#pragma mark - 点击对焦
+- (void)tapGesMethod:(UITapGestureRecognizer *)tap {
+    NSLog(@"Tap");
+    CGPoint tapScreenPoint = [tap locationInView:self];
+    CGPoint equipmentPoint = [self screenCoordinateSystemPointToEquipmentCoordinateSystemPoint:tapScreenPoint];
+    if ([[TYCameraControlInstance shareInstance] canCameraSupportsTapToFocus]) {
+        [[TYCameraControlInstance shareInstance] focusAtPoint:equipmentPoint];
+    }
+    if ([[TYCameraControlInstance shareInstance] canCameraSupportsTapToExpose]) {
+        [[TYCameraControlInstance shareInstance] exposeAtPoint:equipmentPoint];
+    }
+}
+
+/**
+ * 将屏幕坐标系上的触控点转为设备坐标系的点
+ */
+- (CGPoint)screenCoordinateSystemPointToEquipmentCoordinateSystemPoint:(CGPoint)point {
+    AVCaptureVideoPreviewLayer *layer = (AVCaptureVideoPreviewLayer *)self.layer;
+    return [layer captureDevicePointOfInterestForPoint:point];
+}
+
+#pragma mark - UI
+- (void)setupUI {
+    [self addSubview:self.overlayView];
+    [self.overlayView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.mas_equalTo(self);
+    }];
+}
+
+#pragma mark - Lazy Load
+- (TYCameraOverlayView *)overlayView {
+    if (nil == _overlayView) {
+        _overlayView = [[TYCameraOverlayView alloc] init];
+    }
+    return _overlayView;
+}
 
 @end
