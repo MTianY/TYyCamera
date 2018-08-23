@@ -8,10 +8,12 @@
 
 #import "TYBaseViewController.h"
 #import "TYCameraPreviewView.h"
+#import "TYCameraTopOverlayView.h"
 
 @interface TYBaseViewController ()
 
 @property (nonatomic, strong) TYCameraPreviewView *previewView;
+@property (nonatomic, strong) TYCameraTopOverlayView *topOverlayView;
 
 @end
 
@@ -37,6 +39,13 @@
     [self.previewView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.mas_equalTo(self.view);
     }];
+    
+    [self.view addSubview:self.topOverlayView];
+    [self.topOverlayView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.mas_equalTo(self.view);
+        make.height.mas_equalTo(100);
+    }];
+    
 }
 
 #pragma mark - Lazy Load
@@ -45,6 +54,12 @@
         _previewView = [[TYCameraPreviewView alloc] init];
     }
     return _previewView;
+}
+- (TYCameraTopOverlayView *)topOverlayView {
+    if (nil == _topOverlayView) {
+        _topOverlayView = [[TYCameraTopOverlayView alloc] init];
+    }
+    return _topOverlayView;
 }
 
 @end

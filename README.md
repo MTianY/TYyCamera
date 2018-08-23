@@ -323,10 +323,10 @@ Privacy - Photo Library Usage Description
     - 配置完成后,对`AVCaptureSession`调用`commitConfiguration`.会分批将所有变更整合在一起,得出一个有关会话的单独的、原子性的修改.
 
 ```objc
-- (void)switchCameras {
+- (BOOL)switchCameras {
     
     if (![self canSwitchCameras]) {
-        return;
+        return NO;
     }
     
     // 获取未激活的摄像头
@@ -343,8 +343,12 @@ Privacy - Photo Library Usage Description
             [self.captureSession addInput:self.activeVideoInput];
         }
         [self.captureSession commitConfiguration];
+    } else {
+        NSLog(@"%@",error);
+        return NO;
     }
     
+    return YES;
 }
 ```
 
@@ -530,4 +534,61 @@ AVCaptureDevice 类可以让开发者修改摄像头的闪光灯和手电筒模�
 - 系统会基于周围环境光照情况自动关闭或打开 LED
     - `AVCaptureTorchModeAuto` 
     - `AVCaptureFlashModeAuto`
+
+```objc
+/**
+ * 是否支持闪光灯模式
+ */
+- (BOOL)cameraHasFlash {
+    return [[self activeCamera] hasFlash];
+}
+
+- (AVCaptureFlashMode)flashMode {
+    return [[self activeCamera] flashMode];
+}
+
+/**
+ * 设置闪光模式:开|关|自动
+ */
+- (void)setFlashMode:(AVCaptureFlashMode)flashMode {
+    AVCaptureDevice *device = [self activeCamera];
+    if ([device isFlashModeSupported:flashMode]) {
+        NSError *error;
+        if ([device lockForConfiguration:&error]) {
+            device.flashMode = flashMode;
+            [device unlockForConfiguration];
+        } else {
+            NSLog(@"%@",error);
+        }
+    }
+}
+
+/**
+ * 是否支持手电筒模式
+ */
+- (BOOL)cameraHasTorch {
+    return [[self activeCamera] hasTorch];
+}
+
+- (AVCaptureTorchMode)torchMode {
+    return [[self activeCamera] torchMode];
+}
+
+/**
+ * 设置手电筒模式: 开|关|自动
+ */
+- (void)setTorchMode:(AVCaptureTorchMode)torchMode {
+    AVCaptureDevice *device = [self activeCamera];
+    if ([device isTorchModeSupported:torchMode]) {
+        NSError *error;
+        if ([device lockForConfiguration:&error]) {
+            device.torchMode = torchMode;
+            [device unlockForConfiguration];
+        } else {
+            NSLog(@"%@",error);
+        }
+    }
+}
+```
+
 

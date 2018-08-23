@@ -191,10 +191,10 @@
 }
 
 #pragma mark 切换摄像头
-- (void)switchCameras {
+- (BOOL)switchCameras {
     
     if (![self canSwitchCameras]) {
-        return;
+        return NO;
     }
     
     // 获取未激活的摄像头
@@ -211,8 +211,12 @@
             [self.captureSession addInput:self.activeVideoInput];
         }
         [self.captureSession commitConfiguration];
+    } else {
+        NSLog(@"%@",error);
+        return NO;
     }
     
+    return YES;
 }
 
 #pragma mark - 点击对焦
@@ -325,6 +329,9 @@
 }
 
 #pragma mark - 闪光灯&手电筒模式
+/**
+ * 是否支持闪光灯模式
+ */
 - (BOOL)cameraHasFlash {
     return [[self activeCamera] hasFlash];
 }
@@ -333,6 +340,9 @@
     return [[self activeCamera] flashMode];
 }
 
+/**
+ * 设置闪光模式:开|关|自动
+ */
 - (void)setFlashMode:(AVCaptureFlashMode)flashMode {
     AVCaptureDevice *device = [self activeCamera];
     if ([device isFlashModeSupported:flashMode]) {
@@ -346,6 +356,9 @@
     }
 }
 
+/**
+ * 是否支持手电筒模式
+ */
 - (BOOL)cameraHasTorch {
     return [[self activeCamera] hasTorch];
 }
@@ -354,6 +367,9 @@
     return [[self activeCamera] torchMode];
 }
 
+/**
+ * 设置手电筒模式: 开|关|自动
+ */
 - (void)setTorchMode:(AVCaptureTorchMode)torchMode {
     AVCaptureDevice *device = [self activeCamera];
     if ([device isTorchModeSupported:torchMode]) {

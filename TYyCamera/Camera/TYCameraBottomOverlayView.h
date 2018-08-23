@@ -1,13 +1,13 @@
 //
-//  TYCameraOverlayView.h
+//  TYCameraBottomOverlayView.h
 //  TYyCamera
 //
-//  Created by Maty on 2018/8/22.
+//  Created by Maty on 2018/8/23.
 //  Copyright © 2018年 kangarootec. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface TYCameraOverlayView : UIView
+@interface TYCameraBottomOverlayView : UIView
 
 @end

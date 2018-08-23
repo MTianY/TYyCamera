@@ -36,7 +36,7 @@
 /**
  * 切换摄像头
  */
-- (void)switchCameras;
+- (BOOL)switchCameras;
 
 #pragma mark - 点击对焦
 /**

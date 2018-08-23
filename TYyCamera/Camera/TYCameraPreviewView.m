@@ -7,13 +7,10 @@
 //
 
 #import "TYCameraPreviewView.h"
-#import "TYCameraOverlayView.h"
 
 @interface TYCameraPreviewView ()
 
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
-@property (nonatomic, strong) TYCameraOverlayView *overlayView;
-
 
 @end
 
@@ -74,21 +71,10 @@
 
 #pragma mark - UI
 - (void)setupUI {
-    [self addSubview:self.overlayView];
-    [self.overlayView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.mas_equalTo(self);
-    }];
-    
+  
 
-    
 }
 
 #pragma mark - Lazy Load
-- (TYCameraOverlayView *)overlayView {
-    if (nil == _overlayView) {
-        _overlayView = [[TYCameraOverlayView alloc] init];
-    }
-    return _overlayView;
-}
 
 @end
