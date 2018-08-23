@@ -81,4 +81,24 @@
  */
 - (BOOL)cameraHasTorch;
 
+#pragma mark - 拍照
+/**
+ * 拍照
+ */
+- (void)captureStillImage;
+
+#pragma mark - 录像
+/**
+ * 是否正在录像
+ */
+- (BOOL)isRecording;
+/**
+ * 开始录像
+ */
+- (void)startRecording;
+/**
+ * 结束录像
+ */
+- (void)stopRecording;
+
 @end

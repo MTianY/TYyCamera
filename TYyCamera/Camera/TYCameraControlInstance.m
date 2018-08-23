@@ -7,8 +7,11 @@
 //
 
 #import "TYCameraControlInstance.h"
+#import <Photos/Photos.h>
 
-@interface TYCameraControlInstance ()
+@interface TYCameraControlInstance () <
+AVCaptureFileOutputRecordingDelegate
+>
 
 /**
  * 会话
@@ -32,6 +35,8 @@
  * 摄像头数量
  */
 @property (nonatomic, readonly) NSUInteger cameraCount;
+
+@property (nonatomic, strong) NSURL *outputURL;
 
 @end
 
@@ -383,6 +388,130 @@
     }
 }
 
+#pragma mark - 拍照
+- (void)captureStillImage {
+    AVCaptureConnection *connection = [self.imageOutput connectionWithMediaType:AVMediaTypeVideo];
+    if (connection.isVideoOrientationSupported) {
+        connection.videoOrientation = [self currentVideoOrientation];
+    }
+    __weak typeof(self) weakSelf = self;
+    [self.imageOutput captureStillImageAsynchronouslyFromConnection:connection completionHandler:^(CMSampleBufferRef  _Nullable imageDataSampleBuffer, NSError * _Nullable error) {
+        if (imageDataSampleBuffer != NULL) {
+            NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+            UIImage *image = [[UIImage alloc] initWithData:imageData];
+            // 写入相册
+            [weakSelf writeImageToPhotoAlbum:image];
+        } else {
+            NSLog(@"%@",[error localizedDescription]);
+        }
+    }];
+}
+
+// 写入图片至相册
+- (void)writeImageToPhotoAlbum:(UIImage *)image {
+    NSMutableArray *imageIDs = [NSMutableArray array];
+    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+        // 写入图片到相册
+        PHAssetChangeRequest *request = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+        // 记录本地标识,等待完成后取出相册中的图片对象
+        [imageIDs addObject:request.placeholderForCreatedAsset.localIdentifier];
+    } completionHandler:^(BOOL success, NSError * _Nullable error) {
+        if (success) {
+            // 取图片
+            __block PHAsset *imageAsset = nil;
+            PHFetchResult *result = [PHAsset fetchAssetsWithLocalIdentifiers:imageIDs options:nil];
+            [result enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                imageAsset = obj;
+                *stop = YES;
+            }];
+            if (imageAsset) {
+                // 加载图片数据
+                [[PHImageManager defaultManager] requestImageDataForAsset:imageAsset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                    NSLog(@"%@",imageData);
+                }];
+            }
+        }
+    }];
+}
+
+
+- (AVCaptureVideoOrientation)currentVideoOrientation {
+    AVCaptureVideoOrientation orientation;
+    switch ([UIDevice currentDevice].orientation) {
+        case UIDeviceOrientationPortrait:
+            orientation = AVCaptureVideoOrientationPortrait;
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            orientation = AVCaptureVideoOrientationLandscapeLeft;
+            break;
+        case UIDeviceOrientationFaceDown:
+            orientation = AVCaptureVideoOrientationPortraitUpsideDown;
+            break;
+        default:
+            orientation = AVCaptureVideoOrientationLandscapeRight;
+            break;
+    }
+    return orientation;
+}
+
+#pragma mark - 视频捕捉
+- (BOOL)isRecording {
+    return self.movieOutput.isRecording;
+}
+
+- (void)startRecording {
+    if (![self isRecording]) {
+        
+        NSLog(@"startRecording  --%@",[NSThread currentThread]);
+        
+        AVCaptureConnection *videoConnection = [self.movieOutput connectionWithMediaType:AVMediaTypeVideo];
+        if ([videoConnection isVideoOrientationSupported]) {
+            videoConnection.videoOrientation = [self currentVideoOrientation];
+        }
+        if ([videoConnection isVideoStabilizationSupported]) {
+            videoConnection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeAuto;
+        }
+        AVCaptureDevice *device = [self activeCamera];
+        if (device.isSmoothAutoFocusSupported) {
+            NSError *error;
+            if ([device lockForConfiguration:&error]) {
+                device.smoothAutoFocusEnabled = YES;
+                [device unlockForConfiguration];
+            } else {
+                NSLog(@"%@",error);
+            }
+        }
+        self.outputURL = [self uniqueURL];
+        [self.movieOutput startRecordingToOutputFileURL:self.outputURL recordingDelegate:self];
+
+    }
+}
+
+- (NSURL *)uniqueURL {
+    NSArray *doc = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docPath = doc.firstObject;
+    NSString *filePath = [docPath stringByAppendingPathComponent:@"camera_movie.mov"];
+    return [NSURL fileURLWithPath:filePath];
+}
+
+- (void)stopRecording {
+    if (self.isRecording) {
+        [self.movieOutput stopRecording];
+    }
+}
+
+#pragma mark <AVCaptureFileOutputRecordingDelegate>
+- (void)captureOutput:(AVCaptureFileOutput *)output didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray<AVCaptureConnection *> *)connections error:(NSError *)error {
+    if (error) {
+        NSLog(@"%@",error);
+    } else {
+        // 保留视频到相册
+        [TYPhotoManger saveVideo:[self.outputURL copy] albumTitle:@"TYVideo" completionHandler:^(BOOL success, NSError *error) {
+            
+        }];
+    }
+    self.outputURL = nil;
+}
 
 
 @end

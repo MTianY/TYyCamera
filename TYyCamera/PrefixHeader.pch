@@ -11,6 +11,7 @@
 
 #import <Masonry.h>
 #import "TYCameraControlInstance.h"
+#import "TYPhotoManger.h"
 
 #define TYSCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define TYSCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height

@@ -9,11 +9,13 @@
 #import "TYBaseViewController.h"
 #import "TYCameraPreviewView.h"
 #import "TYCameraTopOverlayView.h"
+#import "TYCameraBottomOverlayView.h"
 
 @interface TYBaseViewController ()
 
 @property (nonatomic, strong) TYCameraPreviewView *previewView;
 @property (nonatomic, strong) TYCameraTopOverlayView *topOverlayView;
+@property (nonatomic, strong) TYCameraBottomOverlayView *bottomOverlayView;
 
 @end
 
@@ -35,6 +37,7 @@
 
 #pragma mark - UI
 - (void)setupUI {
+    
     [self.view addSubview:self.previewView];
     [self.previewView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.mas_equalTo(self.view);
@@ -44,6 +47,12 @@
     [self.topOverlayView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.mas_equalTo(self.view);
         make.height.mas_equalTo(100);
+    }];
+    
+    [self.view addSubview:self.bottomOverlayView];
+    [self.bottomOverlayView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.bottom.right.mas_equalTo(self.view);
+        make.height.mas_equalTo(120);
     }];
     
 }
@@ -60,6 +69,13 @@
         _topOverlayView = [[TYCameraTopOverlayView alloc] init];
     }
     return _topOverlayView;
+}
+
+- (TYCameraBottomOverlayView *)bottomOverlayView {
+    if (nil == _bottomOverlayView) {
+        _bottomOverlayView = [[TYCameraBottomOverlayView alloc] init];
+    }
+    return _bottomOverlayView;
 }
 
 @end

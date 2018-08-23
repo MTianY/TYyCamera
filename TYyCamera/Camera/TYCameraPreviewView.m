@@ -7,10 +7,17 @@
 //
 
 #import "TYCameraPreviewView.h"
+#import "TYCameraCollectionViewCell.h"
 
-@interface TYCameraPreviewView ()
+static NSString * const cellID = @"cellID";
+
+@interface TYCameraPreviewView () <
+UICollectionViewDataSource,
+UICollectionViewDelegate
+>
 
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
+@property (nonatomic, strong) UICollectionView *collectionView;
 
 @end
 
@@ -69,12 +76,58 @@
     return [layer captureDevicePointOfInterestForPoint:point];
 }
 
+#pragma mark - <UICollectionViewDataSource, UICollectionViewDelegate>
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return 2;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    TYCameraCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellID forIndexPath:indexPath];
+    return cell;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    NSLog(@"%f",self.collectionView.contentOffset.x);
+    
+    CGFloat offset_X = self.collectionView.contentOffset.x;
+    NSNumber *offetXNum = [NSNumber numberWithFloat:offset_X];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"TYNotification_CollectionView_ContentOffset_X" object:offetXNum];
+    
+}
+
 #pragma mark - UI
 - (void)setupUI {
-  
-
+    [self addSubview:self.collectionView];
+    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.bottom.mas_equalTo(self);
+    }];
 }
 
 #pragma mark - Lazy Load
+- (UICollectionView *)collectionView {
+    if (nil == _collectionView) {
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.itemSize = CGSizeMake(TYSCREEN_WIDTH, TYSCREEN_HEIGHT);
+        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        layout.minimumLineSpacing = 0;
+        layout.minimumInteritemSpacing = 0;
+        layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.dataSource = self;
+        _collectionView.delegate = self;
+        _collectionView.pagingEnabled = YES;
+        _collectionView.backgroundColor = [UIColor clearColor];
+        [_collectionView setShowsVerticalScrollIndicator:NO];
+        [_collectionView setShowsHorizontalScrollIndicator:NO];
+        [_collectionView registerClass:[TYCameraCollectionViewCell class] forCellWithReuseIdentifier:cellID];
+        [_collectionView setBounces:NO];
+    }
+    return _collectionView;
+}
 
 @end
