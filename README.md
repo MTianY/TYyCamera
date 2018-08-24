@@ -774,5 +774,198 @@ AVCaptureDevice 类可以让开发者修改摄像头的闪光灯和手电筒模�
 - `AVMetadataFaceObject` 实例定义了多个用来描述被检测到人脸的属性,最重要的一个属性就是`人脸的边界(bounds).`它是一个设备标量坐标格式的`CGRect`(设备坐标系中的尺寸,摄像头原始朝向从左上角(0,0)到右下角(1,1)).
 - 除了人脸边界(bounds),`AVMetadataFaceObject`还给出了用来定义检测`人脸倾斜角`和`偏转角`的参数.
     - `人脸倾斜角(roll angle)`表示人的头部向肩部方向的侧倾角度.
-    - `偏转角(yaw angle)`表示人脸绕`y 轴`旋转的角度. 
+    - `偏转角(yaw angle)`表示人脸绕`y 轴`旋转的角度.
+
+```objc
+#pragma mark - 人脸检测
+- (BOOL)setupSessionOutputs:(NSError *)error {
+    self.metadataOutput = [[AVCaptureMetadataOutput alloc] init];
+    if ([self.captureSession canAddOutput:self.metadataOutput]) {
+        [self.captureSession addOutput:self.metadataOutput];
+        
+        NSArray *metadataObjectTypes = @[AVMetadataObjectTypeFace];
+        self.metadataOutput.metadataObjectTypes = metadataObjectTypes;
+        
+        [self.metadataOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+        
+        return YES;
+        
+    } else {
+        if (error) {
+            NSLog(@"%@",error);
+        }
+        return NO;
+    }
+}
+
+#pragma mark - <AVCaptureMetadataOutputObjectsDelegate>
+- (void)captureOutput:(AVCaptureOutput *)output didOutputMetadataObjects:(NSArray<__kindof AVMetadataObject *> *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
+    for (AVMetadataFaceObject *faceObj in metadataObjects) {
+        NSLog(@"%li",faceObj.faceID);
+        NSLog(@"%@",NSStringFromCGRect(faceObj.bounds));
+    }
+    if ([self.faceDetectionDelegate respondsToSelector:@selector(didDetectFaces:)]) {
+        [self.faceDetectionDelegate didDetectFaces:metadataObjects];
+    }
+    // 自动对焦,曝光
+    [[TYCameraControlInstance shareInstance] resetFocusAndExposureModes];
+}
+``` 
+
+然后在`TYCameraPreviewView`中,先配置输出,然后根据代理方法传来的 `metadataObjects`进行接下来的操作.
+
+```objc
+#pragma mark - 人脸检测
+
+- (void)setupFace {
+    
+    self.faceLayersMutDict = [NSMutableDictionary dictionary];
+    self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    
+    self.faceOverlayLayer = [CALayer layer];
+    self.faceOverlayLayer.frame = self.bounds;
+    self.faceOverlayLayer.sublayerTransform = TYMakePerspectiveTransform(1000);
+    [self.previewLayer addSublayer:self.faceOverlayLayer];
+    
+    [[TYCameraControlInstance shareInstance] setFaceDetectionDelegate:self];
+    
+    NSError *error;
+    if ([[TYCameraControlInstance shareInstance] setupSessionOutputs:error]) {
+        if (error) {
+            NSLog(@"error: =%@",error);
+        }
+    }
+    
+}
+
+- (void)didDetectFaces:(NSArray *)faces {
+    NSArray *transformedFaces = [self transformedFacesFromFaces:faces];
+    
+    NSLog(@"%@",transformedFaces);
+    
+    // 确定移除视图的人脸,将图层移除
+    NSMutableArray *lostFaces = [self.faceLayersMutDict.allKeys mutableCopy];
+    
+    for (AVMetadataFaceObject *face in transformedFaces) {
+        NSNumber *faceID = @(face.faceID);
+        [lostFaces removeObject:faceID];
+        
+        // 如果 faceID 一直相同,直接 return
+        if (faceID == self.lastFaceID) {
+            return;
+        } else {
+            
+            // 记录上一次的 faceID
+            self.lastFaceID = faceID;
+            [self.faceOverlayLayer setHidden:NO];
+            
+            CALayer *layer = self.faceLayersMutDict[faceID];
+            if (!layer) {
+                // 如果没有 faceID 对应的 layer. 就创建新的
+                layer = [self makeFaceLayer];
+                [self.faceOverlayLayer addSublayer:layer];
+                self.faceLayersMutDict[faceID] = layer;
+            }
+            
+            layer.transform = CATransform3DIdentity;
+            layer.frame = face.bounds;
+            
+            // 检查 hasRollAngle 属性判断人脸对象是否具有有效的斜倾角
+            if (face.hasRollAngle) {
+                CATransform3D t = [self transformForRollAngle:face.rollAngle];
+                layer.transform = CATransform3DConcat(layer.transform, t);
+            }
+            
+            if (face.hasYawAngle) {
+                CATransform3D t = [self transformForYawAngle:face.yawAngle];
+                layer.transform = CATransform3DConcat(layer.transform, t);
+            }
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.faceOverlayLayer setHidden:YES];
+            });
+            
+        }
+        
+        
+    }
+    
+    for (NSNumber *faceID in lostFaces) {
+        CALayer *layer = self.faceLayersMutDict[faceID];
+        [layer removeFromSuperlayer];
+        [self.faceLayersMutDict removeObjectForKey:faceID];
+    }
+    
+}
+
+/*
+ *将设备坐标系的人脸对象转为视图空间对象的集合
+ */
+- (NSArray *)transformedFacesFromFaces:(NSArray *)faces {
+    NSMutableArray *transformedFaces = [NSMutableArray array];
+    for (AVMetadataObject *face in faces) {
+        AVMetadataObject *transformedFace = [self.previewLayer transformedMetadataObjectForMetadataObject:face];
+        [transformedFaces addObject:transformedFace];
+    }
+    return transformedFaces;
+}
+
+/**
+ * 返回一个新的 layer
+ */
+- (CALayer *)makeFaceLayer {
+    CALayer *layer = [CALayer layer];
+    layer.borderColor = [UIColor orangeColor].CGColor;
+    layer.borderWidth = 2.0f;
+    return layer;
+}
+
+/**
+ * 绕 Z 轴旋转
+ */
+- (CATransform3D)transformForRollAngle:(CGFloat)rollAngleInDegrees {
+    CGFloat rollAngleInRadians = TYDegressToRadian(rollAngleInDegrees);
+    return CATransform3DMakeRotation(rollAngleInRadians, 0.0f, 0.0f, 1.0f);
+}
+
+/**
+ * 绕 Y 轴旋转
+ */
+- (CATransform3D)transformForYawAngle:(CGFloat)yawAngleInDegrees {
+    CGFloat yawAngleInRadians = TYDegressToRadian(yawAngleInDegrees);
+    CATransform3D yawTransform = CATransform3DMakeRotation(yawAngleInRadians, 0.0f, -1.0f, 0.0f);
+    return CATransform3DConcat(yawTransform, [self orientationTransform]);
+}
+
+- (CATransform3D)orientationTransform {
+    CGFloat angle = 0.0f;
+    switch ([UIDevice currentDevice].orientation) {
+        case UIDeviceOrientationPortraitUpsideDown:
+            angle = M_PI;
+            break;
+            
+        case UIDeviceOrientationLandscapeRight:
+            angle = -M_PI / 2.0f;
+            break;
+            
+        case UIDeviceOrientationLandscapeLeft:
+            angle = M_PI / 2.0f;
+            break;
+            
+        case UIDeviceOrientationPortrait:
+            angle = 0.0f;
+            break;
+            
+        default:
+            break;
+    }
+    return CATransform3DMakeRotation(angle, 0.0f, 0.0f, 1.0f);
+}
+
+static CATransform3D TYMakePerspectiveTransform(CGFloat eyePosition) {
+    CATransform3D transform = CATransform3DIdentity;
+    transform.m34 = -1.0 / eyePosition;
+    return transform;
+}
+```
 
