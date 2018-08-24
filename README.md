@@ -669,7 +669,7 @@ AVCaptureDevice 类可以让开发者修改摄像头的闪光灯和手电筒模�
 }
 ```
 
-## 8.录制视频
+### 8.录制视频
 
 ```objc
 #pragma mark - 视频捕捉
@@ -732,6 +732,47 @@ AVCaptureDevice 类可以让开发者修改摄像头的闪光灯和手电筒模�
 }
 ```
 
+### 9.视频缩放
 
+`AVCaptureDevice`提供了名为`videoZoomFactor`的属性,用来控制捕捉设备的缩放等级.
 
+- 这个属性的最小值为1.0,即不能进行缩放的图片.
+- 最大值由捕捉设备的`activeFormat`值确定.
+
+设备执行缩放效果是通过居中裁剪由摄像头传感器捕捉到的图片实现.当设置了一个低缩放因子时,一般低于1.5,图片等于或大于输出尺寸,这就在不用放大的情况下进行了一个适度的缩放,图片质量得以全部保存.
+在哪个点开始放大图像需要由`AVCaptureDeviceFormat`的`videoZoomFactorUpscaleThreshold`值确定.
+
+```objc
+- (BOOL)cameraSupportZoom {
+    return [self activeCamera].activeFormat.videoMaxZoomFactor > 1.0f;
+}
+
+- (CGFloat)maxZoomFactor {
+    return MIN([self activeCamera].activeFormat.videoMaxZoomFactor, 4.0f);
+}
+
+- (void)setZoomValue:(CGFloat)zoomValue {
+    if (![self activeCamera].isRampingVideoZoom) {
+        NSError *error;
+        if ([[self activeCamera] lockForConfiguration:&error]) {
+            CGFloat zoomFactor = pow([self maxZoomFactor], zoomValue);
+            [self activeCamera].videoZoomFactor = zoomFactor;
+            [[self activeCamera] unlockForConfiguration];
+        } else {
+            NSLog(@"%@",error);
+        }
+    }
+}
+```
+
+### 10.人脸检测
+
+苹果公司首次向 iOS 开发者提供人脸检测功能是在`Core Image`框架中给出的.`Core Image`框架定义了`CIDetector`和`CIFaceFeature`两个对象,它们使用起来非常简单但提供了非常强大的人脸检测功能.但是并没有针对`实时性`进行优化,导致在现代摄像头和视频应用程序要求的帧率之下很难应用.
+
+在 iOS 6版本中,一个新的硬件加速特性被直接加入到 AVFoundation 中,这次支持对`10个人脸进行实时检测`.通过一个特定的`AVCaptureOutput`类型`AVCaptureMetadataOutput`可以实现上述功能.它的输出同之前见过的类似,不过不同于输出一个静态图片或 QuickTime 影片,它输出的是元数据.这个元数据来自于一个`AVMetadataObject`抽象类的形式,该类定义了用来处理多种元数据类型的接口.当使用人脸检测时,会输出一个具体的子类类型`AVMetadataFaceObject`.
+
+- `AVMetadataFaceObject` 实例定义了多个用来描述被检测到人脸的属性,最重要的一个属性就是`人脸的边界(bounds).`它是一个设备标量坐标格式的`CGRect`(设备坐标系中的尺寸,摄像头原始朝向从左上角(0,0)到右下角(1,1)).
+- 除了人脸边界(bounds),`AVMetadataFaceObject`还给出了用来定义检测`人脸倾斜角`和`偏转角`的参数.
+    - `人脸倾斜角(roll angle)`表示人的头部向肩部方向的侧倾角度.
+    - `偏转角(yaw angle)`表示人脸绕`y 轴`旋转的角度. 
 

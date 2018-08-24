@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
+@protocol TYFaceDetectionDelegate <NSObject>
+- (void)didDetectFaces:(NSArray *)faces;
+@end
+
 @interface TYCameraControlInstance : NSObject
 
 + (instancetype)shareInstance;
@@ -100,5 +104,22 @@
  * 结束录像
  */
 - (void)stopRecording;
+
+#pragma mark - 缩放
+/**
+ * 是否支持缩放
+ */
+- (BOOL)cameraSupportZoom;
+/**
+ * 缩放
+ */
+- (void)setZoomValue:(CGFloat)zoomValue;
+
+#pragma mark - 人脸检测
+@property (nonatomic, weak) id<TYFaceDetectionDelegate> faceDetectionDelegate;
+/**
+ * 配置 AVCaptureMetadataOutput
+ */
+- (BOOL)setupSessionOutputs:(NSError *)error;
 
 @end

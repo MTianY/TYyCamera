@@ -81,6 +81,7 @@
  * 切换摄像头
  */
 - (void)switchCameraBtnClick:(UIButton *)btn {
+
     if ([[TYCameraControlInstance shareInstance] canSwitchCameras]) {
         if (![[TYCameraControlInstance shareInstance] switchCameras]) {
             return;

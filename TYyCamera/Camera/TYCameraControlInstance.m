@@ -10,7 +10,8 @@
 #import <Photos/Photos.h>
 
 @interface TYCameraControlInstance () <
-AVCaptureFileOutputRecordingDelegate
+AVCaptureFileOutputRecordingDelegate,
+AVCaptureMetadataOutputObjectsDelegate
 >
 
 /**
@@ -37,6 +38,8 @@ AVCaptureFileOutputRecordingDelegate
 @property (nonatomic, readonly) NSUInteger cameraCount;
 
 @property (nonatomic, strong) NSURL *outputURL;
+
+@property (nonatomic, strong) AVCaptureMetadataOutput *metadataOutput;
 
 @end
 
@@ -513,5 +516,60 @@ AVCaptureFileOutputRecordingDelegate
     self.outputURL = nil;
 }
 
+#pragma mark - 缩放
+- (BOOL)cameraSupportZoom {
+    return [self activeCamera].activeFormat.videoMaxZoomFactor > 1.0f;
+}
+
+- (CGFloat)maxZoomFactor {
+    return MIN([self activeCamera].activeFormat.videoMaxZoomFactor, 4.0f);
+}
+
+- (void)setZoomValue:(CGFloat)zoomValue {
+    if (![self activeCamera].isRampingVideoZoom) {
+        NSError *error;
+        if ([[self activeCamera] lockForConfiguration:&error]) {
+            CGFloat zoomFactor = pow([self maxZoomFactor], zoomValue);
+            [self activeCamera].videoZoomFactor = zoomFactor;
+            [[self activeCamera] unlockForConfiguration];
+        } else {
+            NSLog(@"%@",error);
+        }
+    }
+}
+
+#pragma mark - 人脸检测
+- (BOOL)setupSessionOutputs:(NSError *)error {
+    self.metadataOutput = [[AVCaptureMetadataOutput alloc] init];
+    if ([self.captureSession canAddOutput:self.metadataOutput]) {
+        [self.captureSession addOutput:self.metadataOutput];
+        
+        NSArray *metadataObjectTypes = @[AVMetadataObjectTypeFace];
+        self.metadataOutput.metadataObjectTypes = metadataObjectTypes;
+        
+        [self.metadataOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+        
+        return YES;
+        
+    } else {
+        if (error) {
+            NSLog(@"%@",error);
+        }
+        return NO;
+    }
+}
+
+#pragma mark - <AVCaptureMetadataOutputObjectsDelegate>
+- (void)captureOutput:(AVCaptureOutput *)output didOutputMetadataObjects:(NSArray<__kindof AVMetadataObject *> *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
+    for (AVMetadataFaceObject *faceObj in metadataObjects) {
+        NSLog(@"%li",faceObj.faceID);
+        NSLog(@"%@",NSStringFromCGRect(faceObj.bounds));
+    }
+    if ([self.faceDetectionDelegate respondsToSelector:@selector(didDetectFaces:)]) {
+        [self.faceDetectionDelegate didDetectFaces:metadataObjects];
+    }
+    // 自动对焦,曝光
+    [[TYCameraControlInstance shareInstance] resetFocusAndExposureModes];
+}
 
 @end

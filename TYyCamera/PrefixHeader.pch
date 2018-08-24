@@ -16,5 +16,7 @@
 #define TYSCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define TYSCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 
+#define TYDegressToRadian(x) (M_PI * (x) / 180.0)               // 角度转弧度
+
 
 #endif /* PrefixHeader_pch */
