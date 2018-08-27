@@ -32,6 +32,12 @@
  */
 - (void)stopSession;
 
+#pragma mark - 获取活跃的摄像头
+/**
+ * 返回当前捕捉会话对应的摄像头,返回激活的捕捉设备输入的 device 属性
+ */
+- (AVCaptureDevice *)activeCamera;
+
 #pragma mark - 切换摄像头
 /**
  * 是否超过一个摄像头

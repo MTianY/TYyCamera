@@ -41,6 +41,8 @@ AVCaptureMetadataOutputObjectsDelegate
 
 @property (nonatomic, strong) AVCaptureMetadataOutput *metadataOutput;
 
+@property (nonatomic, strong) NSMutableArray *imageIDsMutArray;
+
 @end
 
 @implementation TYCameraControlInstance
@@ -402,8 +404,10 @@ AVCaptureMetadataOutputObjectsDelegate
         if (imageDataSampleBuffer != NULL) {
             NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
             UIImage *image = [[UIImage alloc] initWithData:imageData];
+            
             // 写入相册
             [weakSelf writeImageToPhotoAlbum:image];
+            
         } else {
             NSLog(@"%@",[error localizedDescription]);
         }
@@ -420,6 +424,9 @@ AVCaptureMetadataOutputObjectsDelegate
         [imageIDs addObject:request.placeholderForCreatedAsset.localIdentifier];
     } completionHandler:^(BOOL success, NSError * _Nullable error) {
         if (success) {
+
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"TYNotification_Photo_Success" object:nil];
+
             // 取图片
             __block PHAsset *imageAsset = nil;
             PHFetchResult *result = [PHAsset fetchAssetsWithLocalIdentifiers:imageIDs options:nil];
@@ -431,6 +438,8 @@ AVCaptureMetadataOutputObjectsDelegate
                 // 加载图片数据
                 [[PHImageManager defaultManager] requestImageDataForAsset:imageAsset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
                     NSLog(@"%@",imageData);
+
+
                 }];
             }
         }
@@ -517,11 +526,13 @@ AVCaptureMetadataOutputObjectsDelegate
 }
 
 #pragma mark - 缩放
+// 如果 activeFormat 的 videoMaxZoomFactor 的值大于1.0.则捕捉设备支持缩放功能.
 - (BOOL)cameraSupportZoom {
     return [self activeCamera].activeFormat.videoMaxZoomFactor > 1.0f;
 }
 
 - (CGFloat)maxZoomFactor {
+    NSLog(@"[self activeCamera].activeFormat.videoMaxZoomFactor = %f",[self activeCamera].activeFormat.videoMaxZoomFactor);
     return MIN([self activeCamera].activeFormat.videoMaxZoomFactor, 4.0f);
 }
 
@@ -529,7 +540,21 @@ AVCaptureMetadataOutputObjectsDelegate
     if (![self activeCamera].isRampingVideoZoom) {
         NSError *error;
         if ([[self activeCamera] lockForConfiguration:&error]) {
+            
             CGFloat zoomFactor = pow([self maxZoomFactor], zoomValue);
+            
+            
+            NSLog(@"zoomValue = %f",zoomValue);
+            NSLog(@"zoomFactor = %f",zoomFactor);
+            NSLog(@"maxZoomFactor = %f",[self maxZoomFactor]);
+            NSLog(@"[self activeCamera].videoZoomFactor = %f",[self activeCamera].videoZoomFactor);
+            NSLog(@"-------------------------------------\n\n");
+            
+            
+            if (zoomFactor > 16) {
+                return;
+            }
+            
             [self activeCamera].videoZoomFactor = zoomFactor;
             [[self activeCamera] unlockForConfiguration];
         } else {
@@ -537,6 +562,7 @@ AVCaptureMetadataOutputObjectsDelegate
         }
     }
 }
+
 
 #pragma mark - 人脸检测
 - (BOOL)setupSessionOutputs:(NSError *)error {
@@ -562,14 +588,23 @@ AVCaptureMetadataOutputObjectsDelegate
 #pragma mark - <AVCaptureMetadataOutputObjectsDelegate>
 - (void)captureOutput:(AVCaptureOutput *)output didOutputMetadataObjects:(NSArray<__kindof AVMetadataObject *> *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
     for (AVMetadataFaceObject *faceObj in metadataObjects) {
-        NSLog(@"%li",faceObj.faceID);
-        NSLog(@"%@",NSStringFromCGRect(faceObj.bounds));
+//        NSLog(@"%li",faceObj.faceID);
+//        NSLog(@"%@",NSStringFromCGRect(faceObj.bounds));
     }
     if ([self.faceDetectionDelegate respondsToSelector:@selector(didDetectFaces:)]) {
         [self.faceDetectionDelegate didDetectFaces:metadataObjects];
     }
     // 自动对焦,曝光
     [[TYCameraControlInstance shareInstance] resetFocusAndExposureModes];
+}
+
+
+#pragma mark - Lazy Load
+- (NSMutableArray *)imageIDsMutArray {
+    if (nil == _imageIDsMutArray) {
+        _imageIDsMutArray = [NSMutableArray array];
+    }
+    return _imageIDsMutArray;
 }
 
 @end

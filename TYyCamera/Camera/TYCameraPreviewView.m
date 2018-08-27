@@ -26,9 +26,14 @@ TYFaceDetectionDelegate
 
 @property (nonatomic, strong) NSNumber *lastFaceID;
 
+// 记录上一次记录的捏合缩放
+@property (nonatomic, assign) CGFloat lastPinchScale;
+
 @end
 
-@implementation TYCameraPreviewView
+@implementation TYCameraPreviewView {
+    CGFloat _initialPinchZoom;
+}
 
 - (AVCaptureVideoPreviewLayer *)previewLayer {
     return (AVCaptureVideoPreviewLayer *)self.layer;
@@ -54,9 +59,13 @@ TYFaceDetectionDelegate
         self.backgroundColor = [UIColor clearColor];
         [self setupUI];
         
+        // 点击手势
         UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesMethod:)];
-        NSLog(@"%@",[self class]);
         [self addGestureRecognizer:tapGes];
+        
+        // 捏合手势
+        UIPinchGestureRecognizer *pinchGes = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGesMethod:)];
+        [self addGestureRecognizer:pinchGes];
         
         [self setupFace];
         
@@ -86,7 +95,63 @@ TYFaceDetectionDelegate
 }
 
 #pragma mark - 缩放
+// 手势捏合调整缩放
+- (void)pinchGesMethod:(UIPinchGestureRecognizer *)pinchGes {
+    
+    NSLog(@"pinchGes.scale = %f",pinchGes.scale);
+    
+    if (pinchGes.state == UIGestureRecognizerStateBegan) {
+        _initialPinchZoom = [[TYCameraControlInstance shareInstance] activeCamera].videoZoomFactor;
+        
+        NSLog(@"pinGes-InitialPinchZoom: %f",_initialPinchZoom);
+        
+    }
+    
+    NSError *error = nil;
+    [[[TYCameraControlInstance shareInstance] activeCamera] lockForConfiguration:&error];
+    if (!error) {
+        CGFloat zoomFactor;
+        CGFloat scale = pinchGes.scale;
+        if (scale < 1.0f) {
+            zoomFactor = _initialPinchZoom - pow([[TYCameraControlInstance shareInstance] activeCamera].activeFormat.videoMaxZoomFactor, 1.0f - pinchGes.scale);
+            
+            NSLog(@"pinGes zoomFactor:  scale<1.0f----->%f",zoomFactor);
+            
+        } else {
+            zoomFactor = _initialPinchZoom + pow([[TYCameraControlInstance shareInstance] activeCamera].activeFormat.videoMaxZoomFactor, (pinchGes.scale - 1.0f)/2.0f);
+            
+            NSLog(@"pinGes zoomFactor:  scale>1.0f---->%f",zoomFactor);
+            
+        }
+        
+        zoomFactor = MIN(4.0f, zoomFactor);
+        zoomFactor = MAX(1.0f, zoomFactor);
+        
+        
+        NSLog(@"pinGes: zoomFactor---->%f",zoomFactor);
+        
+        NSLog(@"[[TYCameraControlInstance shareInstance] activeCamera].activeFormat.videoMaxZoomFactor = %f",[[TYCameraControlInstance shareInstance] activeCamera].activeFormat.videoMaxZoomFactor);
+        
+        NSLog(@"*********************\n\n");
+        
+        [[TYCameraControlInstance shareInstance] activeCamera].videoZoomFactor = zoomFactor;
+        
+//        CGFloat zoomFactor = pow([self maxZoomFactor], zoomValue);
+        CGFloat zoomValue = sqrt(zoomFactor);
+        NSLog(@"zoomValue = %f",zoomValue);
+        
+    
+        [[[TYCameraControlInstance shareInstance] activeCamera] unlockForConfiguration];
+        
+    }
+    
+}
+
+// 滑动 slider 调节缩放
 - (void)sliderChangeMethod:(UISlider *)slider {
+    
+    NSLog(@"slider.Value = %f",slider.value);
+    
     if ([[TYCameraControlInstance shareInstance] cameraSupportZoom]) {
         [[TYCameraControlInstance shareInstance] setZoomValue:slider.value];
     }
@@ -119,7 +184,7 @@ TYFaceDetectionDelegate
 - (void)didDetectFaces:(NSArray *)faces {
     NSArray *transformedFaces = [self transformedFacesFromFaces:faces];
     
-    NSLog(@"%@",transformedFaces);
+//    NSLog(@"%@",transformedFaces);
     
     // 确定移除视图的人脸,将图层移除
     NSMutableArray *lostFaces = [self.faceLayersMutDict.allKeys mutableCopy];
@@ -310,7 +375,7 @@ static CATransform3D TYMakePerspectiveTransform(CGFloat eyePosition) {
     if (nil == _scaleSlider) {
         _scaleSlider = [[UISlider alloc] init];
         _scaleSlider.minimumValue = 0.0f;
-        _scaleSlider.maximumValue = 2.0f;
+        _scaleSlider.maximumValue = 1.0f;
         [_scaleSlider addTarget:self action:@selector(sliderChangeMethod:) forControlEvents:UIControlEventValueChanged];
     }
     return _scaleSlider;

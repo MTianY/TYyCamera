@@ -20,6 +20,7 @@
 		4C6D23EF212E5E3600B5AFA6 /* TYCameraBottomOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D23EE212E5E3600B5AFA6 /* TYCameraBottomOverlayView.m */; };
 		4C6D23F2212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D23F1212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.m */; };
 		4C6D23F8212EA44E00B5AFA6 /* TYPhotoManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D23F6212EA44E00B5AFA6 /* TYPhotoManger.m */; };
+		4C8DACC62133A93C0075BDB4 /* TYPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DACC52133A93C0075BDB4 /* TYPhotoView.m */; };
 		A35072F18E9DBDD37227547B /* libPods-TYyCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF79ADEAA19492F6AA5EE1D /* libPods-TYyCamera.a */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,8 @@
 		4C6D23F1212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCameraCollectionViewCell.m; sourceTree = "<group>"; };
 		4C6D23F6212EA44E00B5AFA6 /* TYPhotoManger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYPhotoManger.m; sourceTree = "<group>"; };
 		4C6D23F7212EA44E00B5AFA6 /* TYPhotoManger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYPhotoManger.h; sourceTree = "<group>"; };
+		4C8DACC42133A93C0075BDB4 /* TYPhotoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYPhotoView.h; sourceTree = "<group>"; };
+		4C8DACC52133A93C0075BDB4 /* TYPhotoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYPhotoView.m; sourceTree = "<group>"; };
 		612F4BD4A956FC6BA85D9707 /* Pods-TYyCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TYyCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TYyCamera/Pods-TYyCamera.debug.xcconfig"; sourceTree = "<group>"; };
 		7BF79ADEAA19492F6AA5EE1D /* libPods-TYyCamera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TYyCamera.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -189,6 +192,8 @@
 				4C6D23F1212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.m */,
 				4C6D23F7212EA44E00B5AFA6 /* TYPhotoManger.h */,
 				4C6D23F6212EA44E00B5AFA6 /* TYPhotoManger.m */,
+				4C8DACC42133A93C0075BDB4 /* TYPhotoView.h */,
+				4C8DACC52133A93C0075BDB4 /* TYPhotoView.m */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -348,6 +353,7 @@
 				4C4271C8212BEFB500F63907 /* TYBaseViewController.m in Sources */,
 				4C4271A4212BEF7F00F63907 /* main.m in Sources */,
 				4C6D23F8212EA44E00B5AFA6 /* TYPhotoManger.m in Sources */,
+				4C8DACC62133A93C0075BDB4 /* TYPhotoView.m in Sources */,
 				4C6D23EC212E5E2A00B5AFA6 /* TYCameraTopOverlayView.m in Sources */,
 				4C6D23F2212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.m in Sources */,
 				4C427196212BEF7D00F63907 /* AppDelegate.m in Sources */,

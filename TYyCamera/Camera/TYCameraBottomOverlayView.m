@@ -14,6 +14,7 @@
 @property (nonatomic, strong) UILabel *infoLabel;
 @property (nonatomic, strong) dispatch_source_t timer;
 @property (nonatomic, assign) int recordTime;
+@property (nonatomic, strong) UIImageView *photoAlbumImageView;
 
 @end
 
@@ -60,6 +61,7 @@
     }];
     
 }
+
 
 #pragma mark - 定时器
 - (void)startTimer {
@@ -152,6 +154,14 @@
         make.bottom.mas_equalTo(self).offset(-10);
         make.top.mas_equalTo(self.photoBtn.mas_bottom).offset(5);
     }];
+    
+    [self addSubview:self.photoAlbumImageView];
+    [self.photoAlbumImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self);
+        make.left.mas_equalTo(self).offset(20);
+        make.width.height.mas_equalTo(60);
+    }];
+    
 }
 
 #pragma mark - Lazy Load
@@ -174,6 +184,15 @@
         _infoLabel.text = @"拍照";
     }
     return _infoLabel;
+}
+
+- (UIImageView *)photoAlbumImageView {
+    if (nil == _photoAlbumImageView) {
+        _photoAlbumImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"闪光灯-开"]];
+        _photoAlbumImageView.layer.borderColor = [UIColor whiteColor].CGColor;
+        _photoAlbumImageView.layer.borderWidth = 1.0f;
+    }
+    return _photoAlbumImageView;
 }
 
 @end
