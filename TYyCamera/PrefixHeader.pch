@@ -10,8 +10,10 @@
 #define PrefixHeader_pch
 
 #import <Masonry.h>
+#import <Photos/Photos.h>
 #import "TYCameraControlInstance.h"
 #import "TYPhotoManger.h"
+#import "TYPhotoTool.h"
 
 #define TYSCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define TYSCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height

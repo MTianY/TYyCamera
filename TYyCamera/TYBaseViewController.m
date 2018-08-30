@@ -11,8 +11,12 @@
 #import "TYCameraTopOverlayView.h"
 #import "TYCameraBottomOverlayView.h"
 #import "TYPhotoView.h"
+#import "TYPhotoAlbumViewController.h"
 
-@interface TYBaseViewController ()
+@interface TYBaseViewController () <
+TYCameraBottomOVerlayViewDelegate,
+UIAlertViewDelegate
+>
 
 @property (nonatomic, strong) TYCameraPreviewView *previewView;
 @property (nonatomic, strong) TYCameraTopOverlayView *topOverlayView;
@@ -59,6 +63,47 @@
     
 }
 
+#pragma mark - <TYCameraBottomOVerlayViewDelegate>
+- (void)tapToOpenPhotoAlbum {
+
+    [[TYPhotoTool shareInstance] requestAuthorizationWithCompletionHandler:^(PHAuthorizationStatus status) {
+        
+        if (status == PHAuthorizationStatusAuthorized) {
+            TYPhotoAlbumViewController *photoAlbumVc = [[TYPhotoAlbumViewController alloc] init];
+            UINavigationController *navVc = [[UINavigationController alloc] initWithRootViewController:photoAlbumVc];
+            [self presentViewController:navVc animated:YES completion:^{
+                
+            }];
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[[UIAlertView alloc] initWithTitle:@"拒绝访问照片库" message:@"用户尚未授予或拒绝此权限来访问照片库,如需访问,请先至系统设置中开启权限" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"设置", nil] show];
+            });
+        }
+        
+    }];
+    
+}
+
+#pragma mark - <UIAlertViewDelegate>
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [self jumpToSystemSetting];
+    }
+}
+
+// 跳系统设置
+- (void)jumpToSystemSetting {
+    NSString *urlStr = @"App-Prefs:root=Bluetooth";
+    NSURL *url = [NSURL URLWithString:urlStr];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        if (@available(iOS 10.0, *)) {
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+        } else {
+            [[UIApplication sharedApplication] openURL:url];
+        }
+    }
+}
+
 #pragma mark - UI
 - (void)setupUI {
     
@@ -98,6 +143,7 @@
 - (TYCameraBottomOverlayView *)bottomOverlayView {
     if (nil == _bottomOverlayView) {
         _bottomOverlayView = [[TYCameraBottomOverlayView alloc] init];
+        _bottomOverlayView.delegate = self;
     }
     return _bottomOverlayView;
 }

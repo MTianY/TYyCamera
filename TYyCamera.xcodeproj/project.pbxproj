@@ -14,13 +14,21 @@
 		4C4271AE212BEF7F00F63907 /* TYyCameraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271AD212BEF7F00F63907 /* TYyCameraTests.m */; };
 		4C4271B9212BEF7F00F63907 /* TYyCameraUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271B8212BEF7F00F63907 /* TYyCameraUITests.m */; };
 		4C4271C8212BEFB500F63907 /* TYBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271C7212BEFB500F63907 /* TYBaseViewController.m */; };
-		4C4271CD212BF15100F63907 /* TYCameraControlInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271CC212BF15100F63907 /* TYCameraControlInstance.m */; };
-		4C4271D0212BF1C200F63907 /* TYCameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4271CF212BF1C200F63907 /* TYCameraPreviewView.m */; };
-		4C6D23EC212E5E2A00B5AFA6 /* TYCameraTopOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D23EB212E5E2A00B5AFA6 /* TYCameraTopOverlayView.m */; };
-		4C6D23EF212E5E3600B5AFA6 /* TYCameraBottomOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D23EE212E5E3600B5AFA6 /* TYCameraBottomOverlayView.m */; };
-		4C6D23F2212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D23F1212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.m */; };
-		4C6D23F8212EA44E00B5AFA6 /* TYPhotoManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6D23F6212EA44E00B5AFA6 /* TYPhotoManger.m */; };
-		4C8DACC62133A93C0075BDB4 /* TYPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8DACC52133A93C0075BDB4 /* TYPhotoView.m */; };
+		4C765E582137C842002FF52A /* TYPhotoAlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E452137C842002FF52A /* TYPhotoAlbumViewController.m */; };
+		4C765E592137C842002FF52A /* TYAlbumInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E482137C842002FF52A /* TYAlbumInfoModel.m */; };
+		4C765E5A2137C842002FF52A /* TYCameraBottomOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E4B2137C842002FF52A /* TYCameraBottomOverlayView.m */; };
+		4C765E5B2137C842002FF52A /* TYCameraCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E4D2137C842002FF52A /* TYCameraCollectionViewCell.m */; };
+		4C765E5C2137C842002FF52A /* TYCameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E4F2137C842002FF52A /* TYCameraPreviewView.m */; };
+		4C765E5D2137C842002FF52A /* TYCameraTopOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E512137C842002FF52A /* TYCameraTopOverlayView.m */; };
+		4C765E5E2137C842002FF52A /* TYCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E532137C842002FF52A /* TYCollectionHeaderView.m */; };
+		4C765E5F2137C842002FF52A /* TYPhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E552137C842002FF52A /* TYPhotoCollectionViewCell.m */; };
+		4C765E602137C842002FF52A /* TYPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E572137C842002FF52A /* TYPhotoView.m */; };
+		4C765E6A2137C84A002FF52A /* TYCameraControlInstance.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E632137C84A002FF52A /* TYCameraControlInstance.m */; };
+		4C765E6B2137C84A002FF52A /* TYPhotoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E662137C84A002FF52A /* TYPhotoTool.m */; };
+		4C765E6C2137C84A002FF52A /* TYPhotoManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E692137C84A002FF52A /* TYPhotoManger.m */; };
+		4C765E6F2137C8D7002FF52A /* TYSeeBigPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E6E2137C8D7002FF52A /* TYSeeBigPhotoViewController.m */; };
+		4C765E722137E12B002FF52A /* TYSeeBigCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E712137E12B002FF52A /* TYSeeBigCollectionViewCell.m */; };
+		4C765E752137F4B2002FF52A /* TYSeeBigPhotoOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C765E742137F4B2002FF52A /* TYSeeBigPhotoOverlayView.m */; };
 		A35072F18E9DBDD37227547B /* libPods-TYyCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BF79ADEAA19492F6AA5EE1D /* libPods-TYyCamera.a */; };
 /* End PBXBuildFile section */
 
@@ -58,21 +66,37 @@
 		4C4271BA212BEF7F00F63907 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C4271C6212BEFB500F63907 /* TYBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYBaseViewController.h; sourceTree = "<group>"; };
 		4C4271C7212BEFB500F63907 /* TYBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYBaseViewController.m; sourceTree = "<group>"; };
-		4C4271CB212BF15100F63907 /* TYCameraControlInstance.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYCameraControlInstance.h; sourceTree = "<group>"; };
-		4C4271CC212BF15100F63907 /* TYCameraControlInstance.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCameraControlInstance.m; sourceTree = "<group>"; };
-		4C4271CE212BF1C200F63907 /* TYCameraPreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYCameraPreviewView.h; sourceTree = "<group>"; };
-		4C4271CF212BF1C200F63907 /* TYCameraPreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCameraPreviewView.m; sourceTree = "<group>"; };
 		4C4271D2212BF49900F63907 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
-		4C6D23EA212E5E2A00B5AFA6 /* TYCameraTopOverlayView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYCameraTopOverlayView.h; sourceTree = "<group>"; };
-		4C6D23EB212E5E2A00B5AFA6 /* TYCameraTopOverlayView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCameraTopOverlayView.m; sourceTree = "<group>"; };
-		4C6D23ED212E5E3600B5AFA6 /* TYCameraBottomOverlayView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYCameraBottomOverlayView.h; sourceTree = "<group>"; };
-		4C6D23EE212E5E3600B5AFA6 /* TYCameraBottomOverlayView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCameraBottomOverlayView.m; sourceTree = "<group>"; };
-		4C6D23F0212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYCameraCollectionViewCell.h; sourceTree = "<group>"; };
-		4C6D23F1212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCameraCollectionViewCell.m; sourceTree = "<group>"; };
-		4C6D23F6212EA44E00B5AFA6 /* TYPhotoManger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYPhotoManger.m; sourceTree = "<group>"; };
-		4C6D23F7212EA44E00B5AFA6 /* TYPhotoManger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYPhotoManger.h; sourceTree = "<group>"; };
-		4C8DACC42133A93C0075BDB4 /* TYPhotoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYPhotoView.h; sourceTree = "<group>"; };
-		4C8DACC52133A93C0075BDB4 /* TYPhotoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYPhotoView.m; sourceTree = "<group>"; };
+		4C765E442137C842002FF52A /* TYPhotoAlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYPhotoAlbumViewController.h; sourceTree = "<group>"; };
+		4C765E452137C842002FF52A /* TYPhotoAlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYPhotoAlbumViewController.m; sourceTree = "<group>"; };
+		4C765E472137C842002FF52A /* TYAlbumInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYAlbumInfoModel.h; sourceTree = "<group>"; };
+		4C765E482137C842002FF52A /* TYAlbumInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYAlbumInfoModel.m; sourceTree = "<group>"; };
+		4C765E4A2137C842002FF52A /* TYCameraBottomOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYCameraBottomOverlayView.h; sourceTree = "<group>"; };
+		4C765E4B2137C842002FF52A /* TYCameraBottomOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYCameraBottomOverlayView.m; sourceTree = "<group>"; };
+		4C765E4C2137C842002FF52A /* TYCameraCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYCameraCollectionViewCell.h; sourceTree = "<group>"; };
+		4C765E4D2137C842002FF52A /* TYCameraCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYCameraCollectionViewCell.m; sourceTree = "<group>"; };
+		4C765E4E2137C842002FF52A /* TYCameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYCameraPreviewView.h; sourceTree = "<group>"; };
+		4C765E4F2137C842002FF52A /* TYCameraPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYCameraPreviewView.m; sourceTree = "<group>"; };
+		4C765E502137C842002FF52A /* TYCameraTopOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYCameraTopOverlayView.h; sourceTree = "<group>"; };
+		4C765E512137C842002FF52A /* TYCameraTopOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYCameraTopOverlayView.m; sourceTree = "<group>"; };
+		4C765E522137C842002FF52A /* TYCollectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYCollectionHeaderView.h; sourceTree = "<group>"; };
+		4C765E532137C842002FF52A /* TYCollectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYCollectionHeaderView.m; sourceTree = "<group>"; };
+		4C765E542137C842002FF52A /* TYPhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYPhotoCollectionViewCell.h; sourceTree = "<group>"; };
+		4C765E552137C842002FF52A /* TYPhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYPhotoCollectionViewCell.m; sourceTree = "<group>"; };
+		4C765E562137C842002FF52A /* TYPhotoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYPhotoView.h; sourceTree = "<group>"; };
+		4C765E572137C842002FF52A /* TYPhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYPhotoView.m; sourceTree = "<group>"; };
+		4C765E622137C84A002FF52A /* TYCameraControlInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYCameraControlInstance.h; sourceTree = "<group>"; };
+		4C765E632137C84A002FF52A /* TYCameraControlInstance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYCameraControlInstance.m; sourceTree = "<group>"; };
+		4C765E652137C84A002FF52A /* TYPhotoTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYPhotoTool.h; sourceTree = "<group>"; };
+		4C765E662137C84A002FF52A /* TYPhotoTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYPhotoTool.m; sourceTree = "<group>"; };
+		4C765E682137C84A002FF52A /* TYPhotoManger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYPhotoManger.h; sourceTree = "<group>"; };
+		4C765E692137C84A002FF52A /* TYPhotoManger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYPhotoManger.m; sourceTree = "<group>"; };
+		4C765E6D2137C8D7002FF52A /* TYSeeBigPhotoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYSeeBigPhotoViewController.h; sourceTree = "<group>"; };
+		4C765E6E2137C8D7002FF52A /* TYSeeBigPhotoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYSeeBigPhotoViewController.m; sourceTree = "<group>"; };
+		4C765E702137E12B002FF52A /* TYSeeBigCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYSeeBigCollectionViewCell.h; sourceTree = "<group>"; };
+		4C765E712137E12B002FF52A /* TYSeeBigCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYSeeBigCollectionViewCell.m; sourceTree = "<group>"; };
+		4C765E732137F4B2002FF52A /* TYSeeBigPhotoOverlayView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TYSeeBigPhotoOverlayView.h; sourceTree = "<group>"; };
+		4C765E742137F4B2002FF52A /* TYSeeBigPhotoOverlayView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYSeeBigPhotoOverlayView.m; sourceTree = "<group>"; };
 		612F4BD4A956FC6BA85D9707 /* Pods-TYyCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TYyCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TYyCamera/Pods-TYyCamera.debug.xcconfig"; sourceTree = "<group>"; };
 		7BF79ADEAA19492F6AA5EE1D /* libPods-TYyCamera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TYyCamera.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -150,7 +174,10 @@
 				4C427195212BEF7D00F63907 /* AppDelegate.m */,
 				4C4271C6212BEFB500F63907 /* TYBaseViewController.h */,
 				4C4271C7212BEFB500F63907 /* TYBaseViewController.m */,
-				4C4271CA212BF12200F63907 /* Camera */,
+				4C765E612137C84A002FF52A /* TYCameralTool */,
+				4C765E672137C84A002FF52A /* TYPhotoMgr */,
+				4C765E642137C84A002FF52A /* TYPhotoTool */,
+				4C765E422137C842002FF52A /* Camera */,
 				4C42719D212BEF7F00F63907 /* Assets.xcassets */,
 				4C42719F212BEF7F00F63907 /* LaunchScreen.storyboard */,
 				4C4271A2212BEF7F00F63907 /* Info.plist */,
@@ -177,25 +204,86 @@
 			path = TYyCameraUITests;
 			sourceTree = "<group>";
 		};
-		4C4271CA212BF12200F63907 /* Camera */ = {
+		4C765E422137C842002FF52A /* Camera */ = {
 			isa = PBXGroup;
 			children = (
-				4C4271CB212BF15100F63907 /* TYCameraControlInstance.h */,
-				4C4271CC212BF15100F63907 /* TYCameraControlInstance.m */,
-				4C4271CE212BF1C200F63907 /* TYCameraPreviewView.h */,
-				4C4271CF212BF1C200F63907 /* TYCameraPreviewView.m */,
-				4C6D23EA212E5E2A00B5AFA6 /* TYCameraTopOverlayView.h */,
-				4C6D23EB212E5E2A00B5AFA6 /* TYCameraTopOverlayView.m */,
-				4C6D23ED212E5E3600B5AFA6 /* TYCameraBottomOverlayView.h */,
-				4C6D23EE212E5E3600B5AFA6 /* TYCameraBottomOverlayView.m */,
-				4C6D23F0212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.h */,
-				4C6D23F1212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.m */,
-				4C6D23F7212EA44E00B5AFA6 /* TYPhotoManger.h */,
-				4C6D23F6212EA44E00B5AFA6 /* TYPhotoManger.m */,
-				4C8DACC42133A93C0075BDB4 /* TYPhotoView.h */,
-				4C8DACC52133A93C0075BDB4 /* TYPhotoView.m */,
+				4C765E432137C842002FF52A /* Controller */,
+				4C765E462137C842002FF52A /* Model */,
+				4C765E492137C842002FF52A /* View */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		4C765E432137C842002FF52A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				4C765E442137C842002FF52A /* TYPhotoAlbumViewController.h */,
+				4C765E452137C842002FF52A /* TYPhotoAlbumViewController.m */,
+				4C765E6D2137C8D7002FF52A /* TYSeeBigPhotoViewController.h */,
+				4C765E6E2137C8D7002FF52A /* TYSeeBigPhotoViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		4C765E462137C842002FF52A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4C765E472137C842002FF52A /* TYAlbumInfoModel.h */,
+				4C765E482137C842002FF52A /* TYAlbumInfoModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4C765E492137C842002FF52A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4C765E4A2137C842002FF52A /* TYCameraBottomOverlayView.h */,
+				4C765E4B2137C842002FF52A /* TYCameraBottomOverlayView.m */,
+				4C765E4C2137C842002FF52A /* TYCameraCollectionViewCell.h */,
+				4C765E4D2137C842002FF52A /* TYCameraCollectionViewCell.m */,
+				4C765E4E2137C842002FF52A /* TYCameraPreviewView.h */,
+				4C765E4F2137C842002FF52A /* TYCameraPreviewView.m */,
+				4C765E502137C842002FF52A /* TYCameraTopOverlayView.h */,
+				4C765E512137C842002FF52A /* TYCameraTopOverlayView.m */,
+				4C765E522137C842002FF52A /* TYCollectionHeaderView.h */,
+				4C765E532137C842002FF52A /* TYCollectionHeaderView.m */,
+				4C765E542137C842002FF52A /* TYPhotoCollectionViewCell.h */,
+				4C765E552137C842002FF52A /* TYPhotoCollectionViewCell.m */,
+				4C765E562137C842002FF52A /* TYPhotoView.h */,
+				4C765E572137C842002FF52A /* TYPhotoView.m */,
+				4C765E702137E12B002FF52A /* TYSeeBigCollectionViewCell.h */,
+				4C765E712137E12B002FF52A /* TYSeeBigCollectionViewCell.m */,
+				4C765E732137F4B2002FF52A /* TYSeeBigPhotoOverlayView.h */,
+				4C765E742137F4B2002FF52A /* TYSeeBigPhotoOverlayView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		4C765E612137C84A002FF52A /* TYCameralTool */ = {
+			isa = PBXGroup;
+			children = (
+				4C765E622137C84A002FF52A /* TYCameraControlInstance.h */,
+				4C765E632137C84A002FF52A /* TYCameraControlInstance.m */,
+			);
+			path = TYCameralTool;
+			sourceTree = "<group>";
+		};
+		4C765E642137C84A002FF52A /* TYPhotoTool */ = {
+			isa = PBXGroup;
+			children = (
+				4C765E652137C84A002FF52A /* TYPhotoTool.h */,
+				4C765E662137C84A002FF52A /* TYPhotoTool.m */,
+			);
+			path = TYPhotoTool;
+			sourceTree = "<group>";
+		};
+		4C765E672137C84A002FF52A /* TYPhotoMgr */ = {
+			isa = PBXGroup;
+			children = (
+				4C765E682137C84A002FF52A /* TYPhotoManger.h */,
+				4C765E692137C84A002FF52A /* TYPhotoManger.m */,
+			);
+			path = TYPhotoMgr;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,16 +437,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C4271CD212BF15100F63907 /* TYCameraControlInstance.m in Sources */,
+				4C765E6C2137C84A002FF52A /* TYPhotoManger.m in Sources */,
+				4C765E6A2137C84A002FF52A /* TYCameraControlInstance.m in Sources */,
+				4C765E5D2137C842002FF52A /* TYCameraTopOverlayView.m in Sources */,
+				4C765E722137E12B002FF52A /* TYSeeBigCollectionViewCell.m in Sources */,
+				4C765E752137F4B2002FF52A /* TYSeeBigPhotoOverlayView.m in Sources */,
+				4C765E5A2137C842002FF52A /* TYCameraBottomOverlayView.m in Sources */,
 				4C4271C8212BEFB500F63907 /* TYBaseViewController.m in Sources */,
 				4C4271A4212BEF7F00F63907 /* main.m in Sources */,
-				4C6D23F8212EA44E00B5AFA6 /* TYPhotoManger.m in Sources */,
-				4C8DACC62133A93C0075BDB4 /* TYPhotoView.m in Sources */,
-				4C6D23EC212E5E2A00B5AFA6 /* TYCameraTopOverlayView.m in Sources */,
-				4C6D23F2212E8E6B00B5AFA6 /* TYCameraCollectionViewCell.m in Sources */,
+				4C765E6B2137C84A002FF52A /* TYPhotoTool.m in Sources */,
+				4C765E5C2137C842002FF52A /* TYCameraPreviewView.m in Sources */,
+				4C765E582137C842002FF52A /* TYPhotoAlbumViewController.m in Sources */,
+				4C765E602137C842002FF52A /* TYPhotoView.m in Sources */,
+				4C765E5B2137C842002FF52A /* TYCameraCollectionViewCell.m in Sources */,
+				4C765E5F2137C842002FF52A /* TYPhotoCollectionViewCell.m in Sources */,
+				4C765E592137C842002FF52A /* TYAlbumInfoModel.m in Sources */,
+				4C765E6F2137C8D7002FF52A /* TYSeeBigPhotoViewController.m in Sources */,
+				4C765E5E2137C842002FF52A /* TYCollectionHeaderView.m in Sources */,
 				4C427196212BEF7D00F63907 /* AppDelegate.m in Sources */,
-				4C6D23EF212E5E3600B5AFA6 /* TYCameraBottomOverlayView.m in Sources */,
-				4C4271D0212BF1C200F63907 /* TYCameraPreviewView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
